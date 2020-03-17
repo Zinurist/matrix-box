@@ -20,7 +20,7 @@ def main():
         
         start_time = time.time()
         while True:
-            time.sleep(sleep_ms)
+            time.sleep(sleep_ms/1000.0)
             end_time = time.time()
             deltatime = end_time-start_time
             start_time = end_time

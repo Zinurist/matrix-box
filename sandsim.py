@@ -23,7 +23,7 @@ class SandSim():
             num_particles = int(np.power(num_pixels, 1./len(self.size)))
             
         self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
-        self.particle_vel = np.zeros((num_particles, 2))
+        self.particle_vel = np.random.sample((num_particles, 2))#np.zeros((num_particles, 2))
         
         pixel_pos = self.particle_pos.astype(np.int)
         self.img[pixel_pos[:,0], pixel_pos[:,1]] = 255
@@ -38,7 +38,7 @@ class SandSim():
         self.particle_pos[:,0] = np.clip(self.particle_pos[:,0], 0., self.size[0]-0.001)
         self.particle_pos[:,1] = np.clip(self.particle_pos[:,1], 0., self.size[1]-0.001)
         
-        self.particle_vel = np.random.sample(self.particle_vel.shape) - 0.5
+        self.particle_vel *= np.random.sample(self.particle_vel.shape)*4 - 2.0
     
         
     def step(self, deltatime, data):
