@@ -1,0 +1,80 @@
+
+import numpy as np
+
+class SandSim():
+
+    def __init__(self, size, num_particles=None):
+        self.size = np.array(size)
+        
+        self.img = np.zeros(self.size, dtype=np.uint8)
+        #add border, needed for current collision detection
+        self.img[0,:] = 150
+        self.img[:,0] = 150
+        self.img[-1,:] = 150
+        self.img[:,-1] = 150
+        
+        self.init_particles(num_particles)
+
+    def init_particles(self, num_particles):
+        if num_particles is None:
+            num_pixels = np.prod()
+            num_particles = int(np.power(num_pixels, 1./len(self.size)))
+            
+        self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
+        self.particle_vel = np.zeros((num_particles, 2))
+        
+        pixel_pos = self.particle_pos.astype(np.int)
+        self.img[pixel_pos[:,0], pixel_pos[:,1]] = 255
+    
+
+    def render(self):
+        return self.img
+        
+    
+    def apply_forces(self, deltatime, data):
+        self.particle_pos = self.particle_pos + self.particle_vel*deltatime
+        
+        self.particle_vel = np.random.sample((num_particles, 2)) - 0.5
+    
+        
+    def step(self, deltatime, data):
+        self.old_pos = self.particle_pos
+        
+        self.apply_forces(deltatime, data)
+        
+        #all dirs the particles are taking and the number of steps of length 1
+        dirs = self.particle_pos - self.old_pos
+        norm = np.linalg.norm(dirs, axis=1)
+        dirs /= norm
+        steps = np.ceil(norm).astype(np.int)
+        
+        #all substeps from oldpos to goal
+        path_steps = np.arange(np.max(steps))+2
+        paths = self.old_pos[:,np.newaxis,:] + path_steps[np.newaxis,:,np.newaxis] * dirs[:,np.newaxis,:]
+        
+        #cutoff steps for shorter paths, and set goal as last step
+        num = len(self.particle_pos
+        paths[np.arange(num), steps, :] = self.particle_pos #last step
+        paths[np.arange(num), steps+1, :] = -1. #cutoff
+        pixel_paths = paths.astype(np.int)
+        
+        #check each path until collision
+        #hard vectorise, as particles might collide with each other
+        #here: order of particles determines which particle gets to stay, for simplicity
+        for i in range(num):
+            #remove particle at old pos, might be placed here again down the line!
+            self.img[self.old_pos[i,0], self.old_pos[i,1]] = 0
+            points_in_img = self.img[pixel_paths[i,:,0], pixel_paths[i,:,1]]
+            first_collision = np.argmax(points_in_img>0)
+            
+            #collision! -> take point one step before
+            if first_collision <= steps[i]:
+                self.particle_pos[i,:] = paths[i, first_collision-1, :]
+            #else: goal pos already in particle_pos
+                
+            pixel_pos = self.particle_pos[i].astype(np.int)
+            self.img[pixel_pos[0], pixel_pos[1] = 255
+        
+        
+
+        
