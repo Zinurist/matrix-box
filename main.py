@@ -1,17 +1,17 @@
 
 import display, imu
-from sand-sim import SandSim
+from sandsim import SandSim
 import sys, time
 
 def main():
     sleep_ms = 10
     size = (64,64)
 
-    #display = display.RGBMatrixDisplay()
-    display = display.PILDisplay(size)
+    display = display.RGBMatrixDisplay()
+    #display = display.PILDisplay(size)
     
-    #imu = imu.RTIMU()
-    imu = imu.DummyIMU(random=True)
+    imu = imu.RTIMU()
+    #imu = imu.DummyIMU(random=True)
     
     sandsim = SandSim(size)
     
