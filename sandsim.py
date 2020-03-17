@@ -4,14 +4,16 @@ import numpy as np
 class SandSim():
 
     def __init__(self, size, num_particles=None):
+        if isinstance(size, int): size = (size,size)
+        if len(size) > 2: raise ValueError("Size needs to be 2D")
         self.size = np.array(size)
         
         self.img = np.zeros(self.size, dtype=np.uint8)
-        #add border, needed for current collision detection
-        self.img[0,:] = 150
-        self.img[:,0] = 150
-        self.img[-1,:] = 150
-        self.img[:,-1] = 150
+        #add border?
+        #self.img[0,:] = 150
+        #self.img[:,0] = 150
+        #self.img[-1,:] = 150
+        #self.img[:,-1] = 150
         
         self.init_particles(num_particles)
 
@@ -33,6 +35,8 @@ class SandSim():
     
     def apply_forces(self, deltatime, data):
         self.particle_pos = self.particle_pos + self.particle_vel*deltatime
+        self.particle_pos[:,0] = np.clip(self.particle_pos[:,0], 0., self.size[0]-0.001)
+        self.particle_pos[:,1] = np.clip(self.particle_pos[:,1], 0., self.size[1]-0.001)
         
         self.particle_vel = np.random.sample(self.particle_vel.shape) - 0.5
     
@@ -56,6 +60,8 @@ class SandSim():
         num = len(self.particle_pos)
         paths[np.arange(num), steps, :] = self.particle_pos #last step
         pixel_paths = paths.astype(np.int)
+        pixel_paths[:,:,0] = np.clip(pixel_paths[:,:,0], 0, self.size[0]-1)
+        pixel_paths[:,:,1] = np.clip(pixel_paths[:,:,1], 0, self.size[1]-1)
         
         #check each path until collision
         #hard vectorise, as particles might collide with each other
