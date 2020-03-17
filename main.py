@@ -7,16 +7,16 @@ def main():
     sleep_ms = 10
     size = (64,64)
 
-    display = display.RGBMatrixDisplay()
-    #display = display.PILDisplay(size)
+    display_ = display.RGBMatrixDisplay(size)
+    #display_ = display.PILDisplay(size)
     
-    imu = imu.RTIMU()
-    #imu = imu.DummyIMU(random=True)
+    imu_ = imu.RTIMU()
+    #imu_ = imu.DummyIMU(random=True)
     
     sandsim = SandSim(size)
     
     try:
-        print("Press CTRL-C to stop sample")
+        print("Press CTRL-C to stop")
         
         start_time = time.time()
         while True:
@@ -25,14 +25,14 @@ def main():
             deltatime = end_time-start_time
             start_time = end_time
             
-            data = imu.get_data()
+            data = imu_.get_data()
             sandsim.step(deltatime, data)
             img = sandsim.render()
-            display.display(img)
+            display_.display(img)
             
     except KeyboardInterrupt:
         sys.exit(0)
 
 
-if __name__ == '__init__':
+if __name__ == '__main__':
     main()
