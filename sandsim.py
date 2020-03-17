@@ -49,7 +49,7 @@ class SandSim():
         #all dirs the particles are taking and the number of steps of length 1
         dirs = self.particle_pos - self.old_pos
         norm = np.linalg.norm(dirs, axis=1)
-        dirs /= norm[:,np.newaxis]
+        dirs[norm>1e-6] /= norm[norm>1e-6,np.newaxis]
         steps = np.ceil(norm).astype(np.int)
         
         #all substeps from oldpos to goal
@@ -73,7 +73,7 @@ class SandSim():
             first_collision = np.argmax(points_in_img>0)
             
             #collision! -> take point one step before
-            if first_collision <= steps[i]:
+            if first_collision>0 and first_collision <= steps[i]:
                 self.particle_pos[i,:] = paths[i, first_collision-1, :]
             #else: goal pos already in particle_pos
                 
@@ -81,5 +81,4 @@ class SandSim():
             self.img[pixel_pos[0], pixel_pos[1]] = 255
         
         
-
         
