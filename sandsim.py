@@ -10,19 +10,29 @@ class SandSim():
         
         self.img = np.zeros(self.size, dtype=np.uint8)
         #add border?
-        self.img[0,:] = 150
-        self.img[:,0] = 150
-        self.img[-1,:] = 150
-        self.img[:,-1] = 150
+        #self.img[0,:] = 150
+        #self.img[:,0] = 150
+        #self.img[-1,:] = 150
+        #self.img[:,-1] = 150
+        self.img[10:20, 30:40] = 200
         
         self.init_particles(num_particles)
 
     def init_particles(self, num_particles):
         if num_particles is None:
             num_pixels = np.prod(self.size)
-            num_particles = int(np.power(num_pixels, 1./len(self.size)))
-            
-        self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
+            num_particles = int(np.power(num_pixels, 1./len(self.size)))*3
+        
+        particles = []
+        for i in range(num_particles):
+            while True:
+                pos = np.random.sample(2) * (self.size-1)
+                pixel_pos = pos.astype(np.int)
+                if self.img[pixel_pos[0], pixel_pos[1]] == 0: break
+            particles.append(pos)
+                
+        #self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
+        self.particle_pos = np.array(particles)
         self.particle_vel = np.zeros((num_particles, 2))
         
         pixel_pos = self.particle_pos.astype(np.int)
@@ -35,9 +45,10 @@ class SandSim():
     
     def apply_forces(self, deltatime, data):
         accel = np.array([-data['accel'][1], -data['accel'][0]])*9.8
-        self.particle_vel = self.particle_vel + accel*deltatime
-        self.particle_vel[:,0] = np.clip(self.particle_vel[:,0], -10, 10)
-        self.particle_vel[:,1] = np.clip(self.particle_vel[:,1], -10, 10)
+        #self.particle_vel = self.particle_vel + accel*deltatime
+        #self.particle_vel[:,0] = np.clip(self.particle_vel[:,0], -10, 10)
+        #self.particle_vel[:,1] = np.clip(self.particle_vel[:,1], -10, 10)
+        self.particle_vel[:,:] = accel*10
         
         self.particle_pos = self.particle_pos + self.particle_vel*deltatime
         self.particle_pos[:,0] = np.clip(self.particle_pos[:,0], 0., self.size[0]-0.001)
