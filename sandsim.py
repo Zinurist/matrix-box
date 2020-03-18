@@ -8,13 +8,19 @@ class SandSim():
         if len(size) > 2: raise ValueError("Size needs to be 2D")
         self.size = np.array(size)
         
-        self.img = np.zeros(self.size, dtype=np.uint8)
+        self.img = np.zeros((self.size[0], self.size[1], 3), dtype=np.uint8)
+        self.collider = np.zeros(self.size, dtype=np.bool)
         #add border?
         #self.img[0,:] = 150
         #self.img[:,0] = 150
         #self.img[-1,:] = 150
         #self.img[:,-1] = 150
-        self.img[10:20, 30:40] = 200
+        self.img[10:20, 30:40] = (250, 50, 150)
+        self.collider[10:20, 30:40] = 200
+        self.img[20:45, 50:55] = (150, 50, 250)
+        self.collider[20:45, 50:55] = 200
+        self.img[40:52, 10:25] = (50, 200, 200)
+        self.collider[40:52, 10:25] = 200
         
         self.init_particles(num_particles)
 
@@ -28,15 +34,20 @@ class SandSim():
             while True:
                 pos = np.random.sample(2) * (self.size-1)
                 pixel_pos = pos.astype(np.int)
-                if self.img[pixel_pos[0], pixel_pos[1]] == 0: break
+                if not self.collider[pixel_pos[0], pixel_pos[1]]: break
             particles.append(pos)
                 
         #self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
         self.particle_pos = np.array(particles)
         self.particle_vel = np.zeros((num_particles, 2))
         
+        self.particle_col = np.random.sample((num_particles, 3))
+        self.particle_col = self.particle_col*150 +100
+        self.particle_col = self.particle_col.astype(np.uint8)
+        
         pixel_pos = self.particle_pos.astype(np.int)
-        self.img[pixel_pos[:,0], pixel_pos[:,1]] = 255
+        self.img[pixel_pos[:,0], pixel_pos[:,1]] = (255,255,255)
+        self.collider[pixel_pos[:,0], pixel_pos[:,1]] = True
     
 
     def render(self):
@@ -83,9 +94,11 @@ class SandSim():
         #here: order of particles determines which particle gets to stay, for simplicity
         for i in range(num):
             #remove particle at old pos, might be placed here again down the line!
-            self.img[pixel_paths[i,0,0], pixel_paths[i,0,1]] = 0
-            points_in_img = self.img[pixel_paths[i,:,0], pixel_paths[i,:,1]]
-            first_collision = np.argmax(points_in_img>0)
+            self.img[pixel_paths[i,0,0], pixel_paths[i,0,1]] = (0,0,0)
+            self.collider[pixel_paths[i,0,0], pixel_paths[i,0,1]] = False
+            
+            points_in_img = self.collider[pixel_paths[i,:,0], pixel_paths[i,:,1]]
+            first_collision = np.argmax(points_in_img)
             
             #collision! -> take point one step before
             if first_collision>0 and first_collision <= steps[i]:
@@ -94,7 +107,8 @@ class SandSim():
             #else: goal pos already in particle_pos
                 
             pixel_pos = self.particle_pos[i].astype(np.int)
-            self.img[pixel_pos[0], pixel_pos[1]] = 255
+            self.img[pixel_pos[0], pixel_pos[1]] = self.particle_col[i]
+            self.collider[pixel_pos[0], pixel_pos[1]] = True
         
         
         
