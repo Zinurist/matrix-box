@@ -10,10 +10,10 @@ class SandSim():
         
         self.img = np.zeros(self.size, dtype=np.uint8)
         #add border?
-        #self.img[0,:] = 150
-        #self.img[:,0] = 150
-        #self.img[-1,:] = 150
-        #self.img[:,-1] = 150
+        self.img[0,:] = 150
+        self.img[:,0] = 150
+        self.img[-1,:] = 150
+        self.img[:,-1] = 150
         
         self.init_particles(num_particles)
 
@@ -79,6 +79,7 @@ class SandSim():
             #collision! -> take point one step before
             if first_collision>0 and first_collision <= steps[i]:
                 self.particle_pos[i,:] = paths[i, first_collision-1, :]
+                self.particle_vel[i,:] = 0.
             #else: goal pos already in particle_pos
                 
             pixel_pos = self.particle_pos[i].astype(np.int)
