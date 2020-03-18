@@ -7,12 +7,12 @@ def main():
     sleep_ms = 10
     size = (64,64)
 
-    display_ = display.RGBMatrixDisplay(size)
-    #display_ = display.PILDisplay(size)
-    
     #imu_ = imu.RTIMU()
     imu_ = imu.MPUIMU()
     #imu_ = imu.DummyIMU(random=True)
+    
+    display_ = display.RGBMatrixDisplay(size)
+    #display_ = display.PILDisplay(size)
     
     sandsim = SandSim(size)
     
