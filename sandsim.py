@@ -34,7 +34,7 @@ class SandSim():
         
     
     def apply_forces(self, deltatime, data):
-        accel = np.array(data['accel'][:2])*8
+        accel = np.array([-data['accel'][1], -data['accel'][0]])*9.8
         self.particle_vel = self.particle_vel + accel*deltatime
         self.particle_vel[:,0] = np.clip(self.particle_vel[:,0], -10, 10)
         self.particle_vel[:,1] = np.clip(self.particle_vel[:,1], -10, 10)
