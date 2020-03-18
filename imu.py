@@ -13,6 +13,19 @@ class DummyIMU():
     
     
     
+class MPUIMU():
+    def __init__(self, address=0x69):
+        from mpu6050 import mpu6050
+        self.sensor = mpu6050(address)
+        
+    def get_data(self):
+        accel = self.sensor.get_accel_data()
+        accel = (accel['x']/9.8, accel['y']/9.8, accel['z']/9.8)
+        gyro = self.sensor.get_gyro_data()
+        gyro = (gyro['x'], gyro['y'], gyro['z'])
+        return {'accel':  accel, 'gyro': gyro, 'fusionPose': (0,0,0) }
+    
+    
 class RTIMU():
 
     def __init__(self, settings_file="RTIMULib"):

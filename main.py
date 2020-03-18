@@ -10,7 +10,8 @@ def main():
     display_ = display.RGBMatrixDisplay(size)
     #display_ = display.PILDisplay(size)
     
-    imu_ = imu.RTIMU()
+    #imu_ = imu.RTIMU()
+    imu_ = imu.MPUIMU()
     #imu_ = imu.DummyIMU(random=True)
     
     sandsim = SandSim(size)
