@@ -37,6 +37,22 @@ class ArrowSim():
         gluPerspective(45, 1.0, 0.1, 50.0)
         glTranslatef(0.0, 0.0, -5)
         glMatrixMode(GL_MODELVIEW)
+
+        glEnable(GL_COLOR_MATERIAL)
+        glClearColor(0., 0., 0., 1.)
+        glEnable(GL_DEPTH_TEST)
+        glClearDepth(1.)
+        glDepthFunc(GL_LESS)
+
+        if config.getboolean('enable_light'):
+            light_pos = [ 2.0, 5.0, 1.0, 1.0 ]
+            #light_amb = [ 0.3, 0.3, 0.3, 1.0 ]
+            light_dif = [ 0.0, 0.5, 1.0, 1.0 ]
+            glLightfv(GL_LIGHT0, GL_POSITION, light_pos)
+            #glLightfv(GL_LIGHT0, GL_AMBIENT, light_amb)
+            glLightfv(GL_LIGHT0, GL_DIFFUSE, light_dif)
+            glEnable(GL_LIGHTING)
+            glEnable(GL_LIGHT0)
         
     def render(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -53,6 +69,7 @@ class ArrowSim():
         gluDisk(quadric, 0.0, 0.8, self.slices, self.stacks)
         glTranslatef(0.0, 0.0, -0.8)
         gluCylinder(quadric, 0.4, 0.4, 0.8, self.slices, self.stacks)
+        gluDisk(quadric, 0.0, 0.4, self.slices, self.stacks)
 
         gluDeleteQuadric(quadric)
 

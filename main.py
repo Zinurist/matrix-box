@@ -54,6 +54,7 @@ DEFAULT_CONFIG = {
         'slices' : 4,
         'stacks' : 2,
         'scale' : 1.5,
+        'enable_light' : True,
     },
     'CubeSim' : {
         'rotate': False,
