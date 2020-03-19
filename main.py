@@ -3,9 +3,10 @@ import argparse
 import configparser
 import sys, time, os
 
+sys.path.append("sims")
+from sims import get_sim_for
 from display import get_display_for
 from imu import get_imu_for
-from sims import get_sim_for
 
 #default configuration, overwritten by settings in the config file
 DEFAULT_CONFIG = {
