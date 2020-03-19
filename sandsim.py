@@ -3,10 +3,9 @@ import numpy as np
 
 class SandSim():
 
-    def __init__(self, size, num_particles=None):
-        if isinstance(size, int): size = (size,size)
-        if len(size) > 2: raise ValueError("Size needs to be 2D")
-        self.size = np.array(size)
+    def __init__(self, config):
+        self.size = np.array( (config.getint('rows'), config.getint('cols')) )
+        num_particles = config.getint('num_particles') if config['num_particles'] else None
         
         self.img = np.zeros((self.size[0], self.size[1], 3), dtype=np.uint8)
         self.collider = np.zeros(self.size, dtype=np.bool)

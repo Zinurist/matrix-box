@@ -1,11 +1,24 @@
 
-
 import numpy as np
+
+
+def get_imu_for(config):
+    imu_type = config['DEFAULT']['imu_type']
+    if imu_type == 'MPUIMU':
+        imu = MPUIMU(config['MPUIMU'])
+    elif imu_type == 'RTIMU':
+        imu = RTIMU(config['RTIMU'])
+    elif imu_type == 'DummyIMU':
+        imu = DummyIMU(config['DummyIMU'])
+    else:
+        raise ValueError('Unknown IMU type: %s' % imu_type)
+    return imu
+
 
 class DummyIMU():
 
-    def __init__(self, random=True):
-        self.random = random
+    def __init__(self, config):
+        self.random = config.getboolean('random')
         
     def get_data(self):    
         data = np.random.normal(0, 1, 9)
@@ -14,9 +27,9 @@ class DummyIMU():
     
     
 class MPUIMU():
-    def __init__(self, address=0x69):
+    def __init__(self, config):
         from mpu6050 import mpu6050
-        self.sensor = mpu6050(address)
+        self.sensor = mpu6050(config.getint('address'))
         
     def get_data(self):
         accel = self.sensor.get_accel_data()
@@ -28,9 +41,9 @@ class MPUIMU():
     
 class RTIMU():
 
-    def __init__(self, settings_file="RTIMULib"):
+    def __init__(self, config):
         self.data = {'accel':  (0,0,0), 'gyro': (0,0,0), 'fusionPose': (0,0,0) }
-        self.settings_file = settings_file
+        self.settings_file = config['settings_file']
         
         #create thread
         from threading import Thread, Lock
