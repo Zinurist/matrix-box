@@ -49,6 +49,8 @@ DEFAULT_CONFIG = {
     'SandSim' : {
         'num_particles' : "",
     },
+    'ArrowSim' : {
+    },
 }
 
 
@@ -96,9 +98,12 @@ def main(args):
     config['DEFAULT']['cols'] = str(size[1])
     sleep_ms = args.sleep_ms
     
+    # Note: sim needs to be loaded before display
+    # sims that use OpenGL require root privileges, and display removes those
+    # alternatively: set the led-no-drop-privs flag in RGBMatrix
+    sim = get_sim_for(config)
     imu = get_imu_for(config)
     display = get_display_for(config)
-    sim = get_sim_for(config)
     
     try:
         print("Press CTRL-C to stop")

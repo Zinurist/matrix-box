@@ -41,10 +41,11 @@ class RGBMatrixDisplay():
         #options.panel_type = config['led_panel_type']
 
         self.matrix = RGBMatrix(options=options)
+        self.offscreen_canvas = self.matrix.CreateFrameCanvas()
         
     def display(self, img):
-        img = Image.fromarray(img).convert('RGB')
-        self.matrix.SetImage(img)
+        self.offscreen_canvas.SetImage(img)
+        self.offscreen_canvas = self.matrix.SwapOnVSync(self.offscreen_canvas)
     
 
 class PILDisplay():
@@ -53,7 +54,6 @@ class PILDisplay():
         pass
         
     def display(self, img):
-        img = Image.fromarray(img).convert('RGB')
         img.show()
     
 

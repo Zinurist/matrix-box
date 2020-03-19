@@ -50,7 +50,7 @@ class SandSim():
     
 
     def render(self):
-        return self.img
+        return Image.fromarray(self.img).convert('RGB')
         
     
     def apply_forces(self, deltatime, data):
