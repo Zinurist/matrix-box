@@ -20,9 +20,9 @@ class DummyIMU():
     def __init__(self, config):
         self.random = config.getboolean('random')
         
-    def get_data(self):    
+    def get_data(self, deltatime):    
         data = np.random.normal(0, 1, 9)
-        return {'accel':  list(data)[:3], 'gyro': list(data)[3:6], 'fusionPose': list(data)[6:] }
+        return {'accel':  data[:3], 'gyro': data[3:6], 'fusionPose': data[6:] }
     
     
     
@@ -30,13 +30,28 @@ class MPUIMU():
     def __init__(self, config):
         from mpu6050 import mpu6050
         self.sensor = mpu6050(config.getint('address'))
+
+        self.fusionPose = np.array([0.,0.,0.])
+        self.calib_counter = 0
+        self.calib_offset = np.array([0.,0.,0.])
         
-    def get_data(self):
+    def get_data(self, deltatime):
         accel = self.sensor.get_accel_data()
-        accel = (accel['x']/9.8, accel['y']/9.8, accel['z']/9.8)
+        accel = np.array([accel['x']/9.8, accel['y']/9.8, accel['z']/9.8])
         gyro = self.sensor.get_gyro_data()
-        gyro = (gyro['x'], gyro['y'], gyro['z'])
-        return {'accel':  accel, 'gyro': gyro, 'fusionPose': (0,0,0) }
+        gyro = np.array([gyro['x'], gyro['y'], gyro['z']])
+
+        
+        #todo: proper kalman filter to estimate orientation
+        if self.calib_counter < 50:
+            self.calib_offset += gyro/50.0
+            self.calib_counter += 1
+            if self.calib_counter == 50:
+                print('Done calibrating')
+        else:
+            self.fusionPose += (gyro - self.calib_offset ) *deltatime
+
+        return {'accel':  accel, 'gyro': gyro, 'fusionPose': self.fusionPose }
     
     
 class RTIMU():
@@ -52,7 +67,7 @@ class RTIMU():
         thr.start()
         
         
-    def get_data(self):
+    def get_data(self, deltatime):
         return {
             'accel' : self.data['accel'],
             'gyro' : self.data['gyro'],

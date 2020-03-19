@@ -9,6 +9,9 @@ def get_sim_for(config):
     elif sim_type == 'ArrowSim':
         from arrowsim import ArrowSim
         sim = ArrowSim(config['ArrowSim'])
+    elif sim_type == 'CubeSim':
+        from cubesim import CubeSim
+        sim = CubeSim(config['CubeSim'])
     else:
         raise ValueError('Unknown Simulation type: %s' % sim_type)
     return sim

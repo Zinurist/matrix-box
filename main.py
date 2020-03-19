@@ -50,6 +50,13 @@ DEFAULT_CONFIG = {
         'num_particles' : "",
     },
     'ArrowSim' : {
+        'draw_style' : 'GLU_SILHOUETTE',
+        'slices' : 4,
+        'stacks' : 2,
+        'scale' : 1.5,
+    },
+    'CubeSim' : {
+        'rotate': False,
     },
 }
 
@@ -115,7 +122,7 @@ def main(args):
             deltatime = end_time-start_time
             start_time = end_time
             
-            data = imu.get_data()
+            data = imu.get_data(deltatime)
             sim.step(deltatime, data)
             img = sim.render()
             display.display(img)
