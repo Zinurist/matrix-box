@@ -36,6 +36,7 @@ class SandSim():
                 pixel_pos = pos.astype(np.int)
                 if not self.collider[pixel_pos[0], pixel_pos[1]]: break
             particles.append(pos)
+            self.collider[pixel_pos[0], pixel_pos[1]] = True
                 
         #self.particle_pos = np.random.sample((num_particles, 2)) * (self.size-1)
         self.particle_pos = np.array(particles)
@@ -44,10 +45,6 @@ class SandSim():
         self.particle_col = np.random.sample((num_particles, 3))
         self.particle_col = self.particle_col*150 +100
         self.particle_col = self.particle_col.astype(np.uint8)
-        
-        pixel_pos = self.particle_pos.astype(np.int)
-        self.img[pixel_pos[:,0], pixel_pos[:,1]] = (255,255,255)
-        self.collider[pixel_pos[:,0], pixel_pos[:,1]] = True
     
 
     def render(self):

@@ -10,6 +10,7 @@ The files for the 3D printed case can be downloaded [here]. Instructions contain
 
 ## Demos
 
+todo
 
 ## Requirements
 The hardware setup is described [here]. 
@@ -18,14 +19,27 @@ The hardware setup is described [here].
 
 - rpi-rgb-matrix
 - RTIMULib (if you don't want to use the mpu6050 python package)
-- OpenGL libraries (should already be installed with Raspian)
+
+RTIMULib needs to be calibrated. I never really got this library working, so I recommend mpu6050 for now.
+
+#### OpenGL requirements
+
+This project was designed to run on Raspian Lite, meaning I needed to run Open GL on a headless pi (no GUI etc., in particular no X11). I used [ref]'s library for this, check the submodule out by running:
+```bash
+git submodule update --init --recursive
+```
+
+You'll also have to make sure that OpenGL is enabled on your pi. Run `sudo raspi-config` and in Advanced Options > GL Driverchange to the second option, GL (Fake KMS).
+
+In the future, I'll add an option to change between [ref]'s library for a headless pi and the normal PyOpenGL library for a desktop pi.
 
 ### Python requirements
-The project should work with both Python 2 and 3 (I tested 2.7.16 and 3.7.3 specifically). Install the following python packages:
+The project should work with both Python 2 and 3 (I tested 2.7.16 and 3.7.3 specifically). Since it needs to be run with root privileges, make sure that all required packages are part of the python path when running python as root. This can be done by either installing the pre-compiled libraries provided by your distro (i.e. `sudo apt install python-XXX`), or by running pip with sudo (generally discouraged, but shouldn't matter for a embedded project like this). The following python packages are needed:
 
 - `numpy`
+- `PyOpenGL` and preferably `PyOpenGL_accelerate` (for animations relying on OpenGL)
 - `mpu6050-raspberrypi` (if you don't want to use RTIMULib)
-- `PIL` (should be installed with the rgb-matrix library)
+- `PIL` (will be installed with the rgb-matrix library)
 
 ## Running and configuration
 
