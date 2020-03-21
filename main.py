@@ -56,6 +56,7 @@ DEFAULT_CONFIG = {
         'stacks' : 2,
         'scale' : 1.5,
         'enable_light' : True,
+        'rotate': False,
     },
     'CubeSim' : {
         'rotate': False,

@@ -37,6 +37,9 @@ class ArrowSim():
         gluPerspective(45, 1.0, 0.1, 50.0)
         glTranslatef(0.0, 0.0, -5)
         glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
+        glPushMatrix()
+        glLoadIdentity()
 
         glEnable(GL_COLOR_MATERIAL)
         glClearColor(0., 0., 0., 1.)
@@ -53,6 +56,8 @@ class ArrowSim():
             glLightfv(GL_LIGHT0, GL_DIFFUSE, light_dif)
             glEnable(GL_LIGHTING)
             glEnable(GL_LIGHT0)
+            
+        self.rotate = config.getboolean('rotate')
         
     def render(self):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -66,10 +71,17 @@ class ArrowSim():
 
         glRotatef(90.0, 0.0, 1.0, 0.0)
         gluCylinder(quadric, 0.8, 0.0, 1.5, self.slices, self.stacks)
+        
+        glRotatef(180.0, 0.0, 1.0, 0.0)
         gluDisk(quadric, 0.0, 0.8, self.slices, self.stacks)
+        glRotatef(180.0, 0.0, 1.0, 0.0)
+
         glTranslatef(0.0, 0.0, -0.8)
         gluCylinder(quadric, 0.4, 0.4, 0.8, self.slices, self.stacks)
+        
+        glRotatef(180.0, 0.0, 1.0, 0.0)
         gluDisk(quadric, 0.0, 0.4, self.slices, self.stacks)
+        glRotatef(180.0, 0.0, 1.0, 0.0)
 
         gluDeleteQuadric(quadric)
 
@@ -77,10 +89,16 @@ class ArrowSim():
         return Image.frombytes('RGB', (self.w, self.h), img_buf)
         
     def step(self, deltatime, data):
-        glLoadIdentity()
-        glRotatef(data['fusionPose'][0], 1, 0, 0)
-        glRotatef(data['fusionPose'][1], 0, 1, 0)
-        glRotatef(-data['fusionPose'][2], 0, 0, 1)
+        if self.rotate:
+            glPopMatrix()
+            glRotatef(deltatime*70.0, 2, 3, 1)
+            glRotatef(deltatime*70.0, 0, 0, 2)
+            glPushMatrix()
+        else:
+            glLoadIdentity()
+            glRotatef(data['fusionPose'][0], 1, 0, 0)
+            glRotatef(data['fusionPose'][1], 0, 1, 0)
+            glRotatef(-data['fusionPose'][2], 0, 0, 1)
 
         
         
