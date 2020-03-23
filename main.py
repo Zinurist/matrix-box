@@ -50,6 +50,14 @@ DEFAULT_CONFIG = {
     'SandSim' : {
         'num_particles' : "",
     },
+    'DodoSim' : {
+    },
+    'StarSim' : {
+        'num_stars' : "",
+        'enable_color' : False,
+        'enable_galaxy' : True,
+        'enable_sparkle' : False,
+    },
     'ArrowSim' : {
         'draw_style' : 'GLU_SILHOUETTE',
         'slices' : 4,

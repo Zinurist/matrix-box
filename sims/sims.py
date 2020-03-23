@@ -6,6 +6,12 @@ def get_sim_for(config):
     if sim_type == 'SandSim':
         from sandsim import SandSim
         sim = SandSim(config['SandSim'])
+    elif sim_type == 'StarSim':
+        from starsim import StarSim
+        sim = StarSim(config['StarSim'])
+    elif sim_type == 'DodoSim':
+        from dodosim import DodoSim
+        sim = DodoSim(config['DodoSim'])
     elif sim_type == 'ArrowSim':
         from arrowsim import ArrowSim
         sim = ArrowSim(config['ArrowSim'])
