@@ -117,14 +117,14 @@ class DodoSim():
         dists = np.linalg.norm(dirs, axis=1)
         dists[dists<1.5] = 0.
         dirs /= dists[:, np.newaxis]
-        ranges = self.dodo_dna[:,0]/5.0 + 2
+        ranges = self.dodo_dna[:,0]/10.0 + 2
         in_range = np.logical_and(dists < ranges, dists >= 1.5)
 
         self.dodo_vel[in_range] = dirs[in_range]
         self.goal_dists = dists
 
     def dodo_move(self, deltatime):
-        move_range = deltatime * self.dodo_dna[:, 1]/10
+        move_range = deltatime * (5+self.dodo_dna[:, 1]/20)
         overshoot = move_range > self.goal_dists
         move_range[overshoot] = self.goal_dists[overshoot]
         move_range[self.dodo_eating] = 0.
@@ -160,7 +160,7 @@ class DodoSim():
 
 
     def dodo_health(self, deltatime):
-        self.dodo_energy -= deltatime*30
+        self.dodo_energy -= deltatime*(30 - 5*self.dodo_dna[:,2]/150)
         self.delete_dodo(self.dodo_energy <= 0.)
 
     def dodo_reproduce(self, deltatime):
