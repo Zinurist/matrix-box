@@ -44,7 +44,7 @@ The 3D printed case makes the entire project a pretty, contained box. I attached
 
 RTIMULib needs to be calibrated. I never really got this library working, so I recommend mpu6050 for now. mpu6050 however doesn't provide fused IMU data, but it works well enough.
 
-#### OpenGL requirements
+### OpenGL requirements
 
 This project was designed to run on Raspian Lite, meaning I needed to run Open GL on a headless pi (no GUI etc., in particular no X11). I used [eduble](https://github.com/eduble/gl)'s library for this, check the submodule out by running:
 ```bash
