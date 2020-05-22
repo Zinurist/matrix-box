@@ -10,7 +10,7 @@ The files for the 3D-printed case can be downloaded [here](https://www.thingiver
 
 ## Demos
 
-[![SandSim](https://giant.gfycat.com/FlamboyantShockedCleanerwrasse.gif)](https://gfycat.com/flamboyantshockedcleanerwrasse)
+[![SandSim](https://i.imgur.com/A4a3ulv.gif)](https://gfycat.com/flamboyantshockedcleanerwrasse)
 
 * [Wireframe Cube rotating](https://gfycat.com/gracefuldistantasiandamselfly) (the cube and animation was taken from [here](https://pythonprogramming.net/opengl-rotating-cube-example-pyopengl-tutorial/))
 * [Wireframe Cube with IMU](https://gfycat.com/clumsyenlightenedboto)
